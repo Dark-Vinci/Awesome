@@ -12,13 +12,13 @@ import (
 )
 
 func TestListFilesInFolder(t *testing.T) {
-	// Create a temporary directory for testing
+	// CREATE TEMP FOLDER
 	tempDir := "test_uploads"
 	err := os.Mkdir(tempDir, os.ModePerm)
 	assert.NoError(t, err)
 	defer os.RemoveAll(tempDir)
 
-	// Create some dummy files in the temporary directory
+	// CREATE DUMMY FILES IN TEMP FOLDER
 	files := []string{"file1.txt", "file2.txt", "subfolder/file3.txt"}
 	for _, file := range files {
 		filePath := fmt.Sprintf("%s/%s", tempDir, file)
@@ -28,34 +28,33 @@ func TestListFilesInFolder(t *testing.T) {
 		assert.NoError(t, err)
 	}
 
-	// Test the ListFilesInFolder function
 	filenames, err := ListFilesInFolder(tempDir)
 	assert.NoError(t, err)
 
-	// Check if the expected filenames are present
+	// CHECK IF EXPECTED FILENAME IS PRESENT
 	expectedFilenames := []string{"file1.txt", "file2.txt", "subfolder/file3.txt"}
 	assert.ElementsMatch(t, expectedFilenames, filenames)
 }
 
 func TestFileExists(t *testing.T) {
-	// Create a temporary file for testing
+	// CREATE A TEMP FOLDER
 	tempFile := "test_file.txt"
 	_, err := os.Create(tempFile)
 	assert.NoError(t, err)
 	defer os.Remove(tempFile)
 
-	// Test if the file exists
+	// TEST WITH FILE THAT EXIT
 	exists := FileExists(tempFile)
 	assert.True(t, exists)
 
-	// Test with a non-existent file
+	// TEST WITH FILE THAT DOES NOT EXIT
 	nonExistentFile := "non_existent_file.txt"
 	exists = FileExists(nonExistentFile)
 	assert.False(t, exists)
 }
 
 func TestFormatResponse(t *testing.T) {
-	// Test with an error
+	// TEST WITH ERROR
 	err := errors.New("test error")
 	statusCode := 500
 	data := &ResponseData{Data: []string{"some data"}}
@@ -72,7 +71,7 @@ func TestFormatResponse(t *testing.T) {
 
 	assert.Equal(t, expectedError, result)
 
-	// Test without an error
+	// TEST WITHOUT ERROR
 	err = nil
 	result = FormatResponse(err, statusCode, data, ti)
 
